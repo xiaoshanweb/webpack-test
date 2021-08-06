@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <script>
+    var d = window.document.createElement('div');
+    d.style.width = '1rem';
+    d.style.display = "none";
+    var head = window.document.getElementsByTagName('head')[0];
+    head.appendChild(d);
+    //得到webview默认字体大小
+    var defaultFontSize = parseFloat(window.getComputedStyle(d, null).getPropertyValue('width'));
+
+    function getRem() {
+      //计算方式不变，只需要在最后把单位转换为百分比
+      document.documentElement.style.fontSize = document.documentElement.offsetWidth / 6.4 / defaultFontSize * 100 + '%';
+    }
+    window.onresize = getRem;
+    getRem();
+  </script>
+</head>
+
+<body></body>
+
+</html>
