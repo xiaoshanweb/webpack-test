@@ -1,6 +1,8 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+// const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader-plugin')
 
 module.exports = {
   /**
@@ -19,10 +21,16 @@ module.exports = {
     filename: '[name].vender.js',
     path: path.resolve(__dirname, 'dist')
   },
+  devServer: {
+    // contentBase: './dist',
+    host: '127.0.0.1',
+    port: 8000,
+    open: true
+  },
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.css/i,
         /**
          * 注：加载css
          * style-laoder是要放到css-loader前面，不然打包会出现错误
@@ -52,6 +60,17 @@ module.exports = {
             outputPath: 'images/'
           }
         }
+      },
+      {
+        test: /\.vue$/i,
+        use: 'vue-loader'
+      },
+      {
+        test: /\.jsx?$/i,
+        exclude: /node_modeuls/,
+        use: {
+          loader: 'babel-loader'
+        }
       }
     ]
   },
@@ -69,7 +88,8 @@ module.exports = {
      */
     new CleanWebpackPlugin({
       cleanAfterEveryBuildPatterns: ['dist']
-    })
+    }),
+    new VueLoaderPlugin()
 
   ]
 }
