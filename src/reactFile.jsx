@@ -5,7 +5,7 @@ export default class ReactApp extends Component {
     super(props);
 
     this.state = {
-      message: "Hello React"
+      message: "我是React文件 333"
     }
   }
 

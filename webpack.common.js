@@ -7,7 +7,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 // 不生成txt文件
 const TerserPlugin = require('terser-webpack-plugin')
 // 单独打包css文件
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
   /**
@@ -15,11 +15,10 @@ module.exports = {
    */
   entry: './src/index.js',
   output: {
-    filename: 'vender.js',
+    filename: 'static/vender.js',
     path: path.resolve(__dirname, 'dist'),
     // publicPath: './'
   },
-  devtool: 'inline-source-map',
   // entry: {
   //   app: './src/index.js',
   //   print: './src/print.js'
@@ -28,14 +27,6 @@ module.exports = {
   //   filename: '[name].vender.js',
   //   path: path.resolve(__dirname, 'dist')
   // },
-  devServer: {
-    // contentBase: './dist',
-    host: 'localhost',
-    port: 8888,
-    open: true,
-    hot: true,
-    // publicPath: './'
-  },
   module: {
     rules: [
       {
@@ -49,7 +40,10 @@ module.exports = {
          * css-loader  他用特定的语法规则对引入进来的css模块进行内容转换，转换出来的css模块其实会拆分成数组，如果单独引入css-loader，是无效的，页面对他转换出来的数组无法识别，
          *             所以需要style-loader把css-loader转换出来的css模块包裹在一个style标签里，引入index.html里的head，这样就可以展示css样式啦！
          */
-        use: ['style-loader', 'css-loader']
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader"
+        ]
       },
       {
         test: /\.less$/,
@@ -103,14 +97,13 @@ module.exports = {
     /**
      * 每次打包都会自动删除之前存在的dist文件夹
      */
-    new CleanWebpackPlugin(),
-    new VueLoaderPlugin(),
-    new ReactRefreshWebpackPlugin(),
 
-    // new ExtractTextPlugin({
-    //   filename: 'css/[name].[contenthash].css',
-    //   allChunks: true
-    // })
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "static/[name].[contenthash].css",
+      chunkFilename: "[id].css",
+    })
   ],
   optimization: {
     minimize: false,
